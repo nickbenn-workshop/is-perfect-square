@@ -36,11 +36,19 @@ The implementation **must** provide this functionality:
 
 ## Tips
 
-1. For computing square roots, `Math.sqrt` is preferred over `Math.pow`. In particular, the former provides a stronger accuracy guarantee when the argument is in fact a perfect square.
+1. For computing square roots, `Math.sqrt(input)` is preferred over `Math.pow(input, 0.5)`. In particular, the former provides a stronger accuracy guarantee than the latter when `input` is an `int` or `long` perfect square that can be represented exactly as a `float` or `double` (respectively).
 
-2. Whenever practical, perform calculations in the integer domain. For example, if `a` and `b` are both `long`, the `boolean` expression `a == b * b` will evaluate correctly in all cases, while `Math.sqrt(a) == b` can give a misleading result for some large `a` and `b` values. (Try this with the values `9_223_372_030_926_249_000L` for `a` and `3_037_000_499L` for `b`.) Note that this doesn't mean you shouldn't use the `Math.sqrt` method in your implementation, but only that you shouldn't rely on it exclusively.
+2. Whenever practical, perform calculations in the integer domain.
 
-3. There are multiple ways to round a floating-point value to an integer, including these:
+    For example, if `a` and `b` are both non-negative `long` values, and if you think that `b` _might_ be the square root of `a`:
+
+    * Checking to see if `b` actually is the square root of `a` by evaluating the `boolean` expression `a == b * b` will work correctly for all `b <= 3_037_000_499L` (the largest `long` value whose square also fits within the range of `long`).
+
+    * On the other hand, testing this with `Math.sqrt(a) == b` can give a _false positive_ result for many large `a` and `b` values. Try this with any `b`, where `b >= 67_108_864 && b <= 3_037_000_499L`, and with `a` taking the squared value of `b`: Not only does `boolean` expression `Math.sqrt(a) == b` evaluate to `true` (as expected); the expression `Math.sqrt(a + 1) == b` evalues to `true` as well! As the value of `a` and `b` increase, there are more and more of these false positives. 
+   
+    Note that this doesn't mean you shouldn't use the `Math.sqrt` method in your implementation, but only that you shouldn't rely on it exclusively.
+
+4. There are multiple ways to round a floating-point value to an integer, including these:
 
     * The `Math.round` method rounds a `double` or `float` to the nearest integer, returning the value as a `long` or `int`, respectively.
 
@@ -50,8 +58,8 @@ The implementation **must** provide this functionality:
 
     * The `Math.ceil` method rounds up (toward $\infty$), returning the value as a `double` (not a `long` or `int`) without a fractional part.
 
-4. You may find it useful to create one or more additional `static` methods as "helpers"; the problem can be solved without doing so, however.
+5. You may find it useful to create one or more additional `static` methods as "helpers"; the problem can be solved without doing so, however.
 
-5. Do not hesitate to declare any `static` fields (especially `static final` constants) that you feel might simplify or clarify your code.
+6. Do not hesitate to declare any `static` fields (especially `static final` constants) that you feel might simplify or clarify your code.
 
-6. The method to be completed includes a `TODO` comment to that effect.
+7. The method to be completed includes a `TODO` comment to that effect.
